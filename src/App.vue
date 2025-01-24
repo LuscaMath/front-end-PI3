@@ -36,11 +36,40 @@
       </nav>
     </div>
   </header>
-  <RouterView />
+  <RouterView class="teste" />
+  <footer>
+    <div class="footer">
+      <div class="about">
+        <h3>Sobre</h3>
+        <p><a href="sobre.html">Quem somos</a></p>
+        <p><a href="suporte.html">Fale conosco</a></p>
+      </div>
+      <div class="services">
+        <h3>Serviços</h3>
+        <p><a href="">Venda para Petshops</a></p>
+        <p><a href="">Entrega</a></p>
+        <p><a href="">Troca e devolução</a></p>
+      </div>
+      <div class="social-media">
+        <h3>Redes sociais</h3>
+        <p class="social-media-logos">
+          <a href="https://instagram.com/maralucypets" target="_blank"><img src="./assets/imagens/insta.png" /></a>
+          <a href=""><img src="./assets/imagens/wpp.png" /></a>
+        </p>
+      </div>
+      <div class="company">
+        <img src="./assets/imagens/logomarca.png" class="company-logomark" />
+        <p>CNPJ: 50.716.105/0001-10</p>
+      </div>
+    </div>
+  </footer>
 </template>
 
 <style scoped>
-  header {
+.teste {
+    height: 100vh;
+}
+header {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -191,6 +220,141 @@ header .bottom-part nav a:hover {
         display: flex;
         margin: 0 auto;
     }
+}
+
+.footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    height: 100%;
+    background-image: linear-gradient(#3F0241, #240025);
+    color: white;
+    padding: 20px 7% 30px;
+}
+
+.footer h3 {
+    font-size: 1.1em;
+    font-weight: bolder;
+}
+
+.footer p {
+    font-size: 0.9em;
+}
+
+.footer a {
+    color: white;
+}
+
+.footer p a:hover {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.footer1 {
+    margin-top: 13.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    height: 100%;
+    background-image: linear-gradient(#3F0241, #240025);
+    color: white;
+    padding: 20px 7% 30px;
+}
+
+.footer1 h3 {
+    font-size: 1.1em;
+    font-weight: bolder;
+}
+
+.footer1 p {
+    font-size: 0.9em;
+}
+
+.footer1 a {
+    color: white;
+}
+
+.footer1 p a:hover {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.about {
+    width: 20%;
+    max-width: 20%;
+    height: auto;
+}
+
+.services {
+    width: 20%;
+    padding-left: 10px;
+    max-width: 25%;
+    height: auto;
+}
+
+.social-media {
+    padding-left: 10px;
+    width: 20%;
+    max-width: 25%;
+    height: auto;
+}
+
+.social-media-logos {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.social-media-logos a img {
+    padding-right: 10px;
+    width: 30px;
+    height: 30px;
+}
+
+.social-media-logos a:hover img {
+    transform: scale(1.08);
+}
+
+.company {
+    max-width: 25%;
+    height: auto;
+    text-align: right;
+    padding-top: 1%;
+    overflow-x: auto;
+}
+
+.company-logomark {
+    max-width: 20%;
+}
+
+.company-logotype {
+    max-width: 55%;
+}
+
+.logo {
+    position: relative;
+    display: flex;
+    height: 100%;
+    width: 40%;
+    padding-left: 7vw;
+}
+
+.logomark {
+    position: sticky;
+    height: 100%;
+    width: auto;
+}
+
+.logotype {
+    position: absolute;
+    padding-left: 2vw;
+    width: 14vw;
+    height: auto;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.company p {
+    font-size: 0.8em;
 }
 </style>
 
