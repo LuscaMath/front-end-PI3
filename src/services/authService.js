@@ -10,4 +10,8 @@ export default {
   refreshToken(refreshToken) {
     return api.post("/auth/refresh/", { refresh: refreshToken });
   },
+
+  register(credentials_register) {
+    return api.post("/auth/register/", credentials_register);
+  }
 };
