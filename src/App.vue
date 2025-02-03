@@ -1,74 +1,115 @@
-<script setup>
-  import { RouterLink, RouterView } from 'vue-router'
-</script>
-
 <template>
-  <header>
-    <div class="top-part">
-      <RouterLink to="/"><img class="logo" src="./assets/imagens/logomarca.png" alt=""></RouterLink>
-      <div class="search-bar">
-        <input type="text" placeholder="O que você está procurando?" />
-        <a href="busca.html"><button>
-            <img src="./assets/imagens/lupa.png" alt="Buscar" />
-          </button></a>
-      </div>
-      <div class="profile-cart">
-        <a href="perfil.html">
-          <div class="profile">
-            <img src="./assets/imagens/perfil.png" alt="">
-            <p>Perfil</p>
-          </div>
-        </a>
+    <header>
+        <div class="top-part">
+            <img class="logo" src="./assets/imagens/logomarca.png" alt="">
+            <div class="search-bar">
+                <input type="text" placeholder="O que você está procurando?" />
+                <a href="busca.html"><button>
+                        <img src="./assets/imagens/lupa.png" alt="Buscar" />
+                    </button></a>
+            </div>
+            <div class="profile-cart">
+                <RouterLink to="/perfil">
+                    <div class="profile">
+                        <img src="./assets/imagens/perfil.png" alt="">
+                        <p>Perfil</p>
+                    </div>
+                </RouterLink>
 
-        <a href="carrinho.html"><img src="./assets/imagens/carrinho.png" alt=""></a>
-      </div>
-    </div>
-    <div class="bottom-part">
-      <button class="hamburger" id="hamburger">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
-      <nav class="nav-links" id="nav-links">
-        <RouterLink to="/">C�ES</RouterLink>
-        <RouterLink to="/">GATOS</RouterLink>
-        <RouterLink to="/">TODOS</RouterLink>
-      </nav>
-    </div>
-  </header>
-  <RouterView class="teste" />
-  <footer>
-    <div class="footer">
-      <div class="about">
-        <h3>Sobre</h3>
-        <p><a href="sobre.html">Quem somos</a></p>
-        <p><a href="suporte.html">Fale conosco</a></p>
-      </div>
-      <div class="services">
-        <h3>Serviços</h3>
-        <p><a href="">Venda para Petshops</a></p>
-        <p><a href="">Entrega</a></p>
-        <p><a href="">Troca e devolução</a></p>
-      </div>
-      <div class="social-media">
-        <h3>Redes sociais</h3>
-        <p class="social-media-logos">
-          <a href="https://instagram.com/maralucypets" target="_blank"><img src="./assets/imagens/insta.png" /></a>
-          <a href=""><img src="./assets/imagens/wpp.png" /></a>
-        </p>
-      </div>
-      <div class="company">
-        <img src="./assets/imagens/logomarca.png" class="company-logomark" />
-        <p>CNPJ: 50.716.105/0001-10</p>
-      </div>
-    </div>
-  </footer>
+                <a href="carrinho.html"><img src="./assets/imagens/carrinho.png" alt=""></a>
+                <button class="logout" v-if="isAuthenticated" @click="logout">Sair</button>
+            </div>
+        </div>
+        <div class="bottom-part">
+            <button class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <nav class="nav-links" id="nav-links">
+                <RouterLink to="/">CÃES</RouterLink>
+                <RouterLink to="/">GATOS</RouterLink>
+                <RouterLink to="/">TODOS</RouterLink>
+            </nav>
+        </div>
+    </header>
+    <RouterView class="teste" />
+    <footer>
+        <div class="footer">
+            <div class="about">
+                <h3>Sobre</h3>
+                <p><a href="sobre.html">Quem somos</a></p>
+                <p><a href="suporte.html">Fale conosco</a></p>
+            </div>
+            <div class="services">
+                <h3>Serviços</h3>
+                <p><a href="">Venda para Petshops</a></p>
+                <p><a href="">Entrega</a></p>
+                <p><a href="">Troca e devolução</a></p>
+            </div>
+            <div class="social-media">
+                <h3>Redes sociais</h3>
+                <p class="social-media-logos">
+                    <a href="https://instagram.com/maralucypets" target="_blank"><img
+                            src="./assets/imagens/insta.png" /></a>
+                    <a href=""><img src="./assets/imagens/wpp.png" /></a>
+                </p>
+            </div>
+            <div class="company">
+                <img src="./assets/imagens/logomarca.png" class="company-logomark" />
+                <p>CNPJ: 50.716.105/0001-10</p>
+            </div>
+        </div>
+    </footer>
 </template>
 
+<script setup>
+import { RouterLink, RouterView } from 'vue-router';
+import { ref, watchEffect, onMounted, onUnmounted } from 'vue';
+
+const isAuthenticated = ref(!!localStorage.getItem('accessToken'));
+
+watchEffect(() => {
+  isAuthenticated.value = !!localStorage.getItem('accessToken');
+});
+
+// 🔹 Criando um MutationObserver para detectar mudanças no localStorage
+let observer;
+
+onMounted(() => {
+  const targetNode = document.createElement("div");
+  targetNode.style.display = "none";
+  document.body.appendChild(targetNode);
+  
+  observer = new MutationObserver(() => {
+    isAuthenticated.value = !!localStorage.getItem('accessToken');
+  });
+
+  observer.observe(targetNode, { childList: true });
+
+  // Sobrescrevendo `localStorage.setItem` para acionar o MutationObserver
+  const originalSetItem = localStorage.setItem;
+  localStorage.setItem = function (key, value) {
+    originalSetItem.apply(this, arguments);
+    targetNode.innerHTML = key + ":" + value;
+  };
+});
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect();
+  }
+});
+
+const logout = () => {
+  localStorage.removeItem('accessToken');
+  isAuthenticated.value = false;
+  window.location.reload();
+};
+</script>
+
 <style scoped>
-.teste {
-    height: 100vh;
-}
+
 header {
     display: flex;
     flex-direction: column;
@@ -187,6 +228,20 @@ header .bottom-part nav a:hover {
     height: 3px;
     background-color: #370035;
     border-radius: 5px;
+}
+
+.logout {
+    background-color:#FDF280;
+    color: #000000;
+    padding: 0.2rem 1rem;
+    border: 0;
+    border-radius: 15px;
+    transition: 1s;
+}
+
+.logout:hover {
+    cursor: pointer;
+    background-color: #ffffff;
 }
 
 
@@ -357,4 +412,3 @@ header .bottom-part nav a:hover {
     font-size: 0.8em;
 }
 </style>
-

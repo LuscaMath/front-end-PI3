@@ -1,17 +1,23 @@
 import api from "./api";
 
 export default {
-  // Método para fazer login
+  // Mï¿½todo para fazer login
   login(credentials) {
     return api.post("/auth/login/", credentials); // Endpoint para obter o token
   },
 
-  // Método para renovar o token (se necessário)
+  // Mï¿½todo para renovar o token (se necessï¿½rio)
   refreshToken(refreshToken) {
     return api.post("/auth/refresh/", { refresh: refreshToken });
   },
 
   register(credentials_register) {
     return api.post("/auth/register/", credentials_register);
+  },
+
+  update(id, credentials_update) {
+    return api.put(`/auth/update/${id}/`, credentials_update);
   }
+
+
 };

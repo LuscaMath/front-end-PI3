@@ -2,10 +2,11 @@
     <div>
       <h1>Lista de Clientes</h1>
       <div v-if="cliente">
+        <p>Id: {{ cliente.id }}</p>
         <p>Nome: {{ cliente.nome_cliente }}</p>
         <p>Email: {{ cliente.email_cliente }}</p>
       </div>
-      <p v-else>Cliente n„o encontrado</p>
+      <p v-else>Cliente n√£o encontrado</p>
     </div>
   </template>
   
@@ -21,7 +22,8 @@
     methods: {
       async fetchClientes() {
         try {
-          const response = await clienteService.getClienteById('2');
+          const client_id = localStorage.getItem('userId');
+          const response = await clienteService.getClienteById(client_id);
           this.cliente = response.data;
         } catch (error) {
           console.error("Erro ao buscar clientes:", error);

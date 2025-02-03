@@ -1,10 +1,10 @@
 <template>
   <div class="form-wrapper">
     <div class="login_container">
-        <h2>Fa�a o Login</h2>
+        <h2>Faça o Login</h2>
         <form @submit.prevent="handleLogin">
           <div>
-            <input placeholder="Usu�rio" type="text" v-model="credentials.username" id="username" required />
+            <input placeholder="Usuário" type="text" v-model="credentials.username" id="username" required />
           </div>
           <div>
             <input placeholder="Senha" type="password" v-model="credentials.password" id="password" required />
@@ -12,24 +12,27 @@
           <button type="submit">Entrar</button>
         </form>
 
-        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     </div>
     <div class="register_container">
         <h2>Crie sua Conta</h2>
         <form @submit.prevent="handleRegister">
           <div>
-            <input placeholder="Usu�rio" type="text" v-model="registerData.username" id="username_register" required />
+            <input placeholder="Usuário" type="text" v-model="registerData.username" id="username_register" required />
+          </div>
+          <div>
+            <input placeholder="Email" type="email" v-model="registerData.email" id="email_register" required />
           </div>
           <div>
             <input placeholder="Senha" type="password" v-model="registerData.password" id="password_register" required />
           </div>
           <div>
-            <input placeholder="email" type="email" v-model="registerData.email" id="email_register" required />
+            <input placeholder="Nome" type="text" v-model="registerData.nome_cliente" id="nome_register" required />
+          </div>
+          <div>
+            <input placeholder="Telefone" type="text" v-model="registerData.telefone" id="telefone_register" required />
           </div>
           <button type="submit">Cadastrar</button>
         </form>
-
-        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       </div>
     </div>
   </template>
@@ -47,8 +50,10 @@
         errorMessage: "",
         registerData: {
           username: "",
-          password: "",
           email: "",
+          password: "",
+          nome_cliente: "",
+          telefone: ""
         }
       };
     },
@@ -61,21 +66,38 @@
           localStorage.setItem("accessToken", response.data.access);
           localStorage.setItem("refreshToken", response.data.refresh);
   
-          // Redireciona para a p�gina principal
+          const user = response.data.user;
+          localStorage.setItem("userId", user.id);
+          localStorage.setItem("username", user.username);
+          localStorage.setItem("email", user.email);
+          localStorage.setItem("nome_cliente", user.nome_cliente);
+          localStorage.setItem("telefone", user.telefone);
+
+          // Redireciona para a p�gina principal
           this.$router.push({ name: "home" });
         } catch (error) {
           this.errorMessage = error;
+          alert("Usuário ou senha inválidos");
+          this.credentials.username = "";
+          this.credentials.password = "";
         }
       },
       
       async handleRegister() {
         try {
           const response = await authService.register(this.registerData);
+          alert("Usuário cadastrado com sucesso!");
           window.location.reload();
 
           this.$router.refresh()
         } catch (error) {
           this.errorMessage = error;
+          alert("Erro ao cadastrar usuário");
+          this.registerData.username = "";
+          this.registerData.email = "";
+          this.registerData.password = "";
+          this.registerData.nome = "";  
+          this.registerData.telefone = "";
         }
       }
     },
