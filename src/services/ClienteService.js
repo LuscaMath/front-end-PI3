@@ -40,5 +40,14 @@ export default {
 
   deleteClienteEndereco(id, enderecoId) {
     return api.delete(`clientes/${id}/enderecos/${enderecoId}/`);
+  },
+  addSuporte(id, suporteData) {
+    return api.post(`clientes/${id}/suporte/`, suporteData);
+  },
+  getClienteSuporte(id) {
+    return api.get(`clientes/${id}/suporte/`);
+  },
+  deleteClienteSuporte(id, suporteId) {
+    return api.delete(`clientes/${id}/suporte/${suporteId}/`);
   }
 };

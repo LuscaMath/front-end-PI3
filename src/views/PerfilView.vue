@@ -134,6 +134,7 @@ export default {
                 const id_user = localStorage.getItem("userId");
                 const response = await ClienteService.addEndereco(id_user, this.enderecoData);
                 alert('Endereço adicionado com sucesso!');
+                this.getAddress();
             } catch (error) {
                 alert('Erro ao adicionar o endereço');
             }
@@ -157,8 +158,8 @@ export default {
                 }
                 const response = await ClienteService.editClientesEnderecos(id_user, id_endereco, enderecoData);
                 alert('Endereço atualizado com sucesso!');
+                this.getAddress();
                 // Atualiza a lista de endereços após a edição bem-sucedida
-                await this.getAddress();
             } catch (error) {
                 console.error('Erro ao atualizar o endereço:', error);
                 alert('Erro ao atualizar o endereço');
