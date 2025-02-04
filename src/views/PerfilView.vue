@@ -8,10 +8,10 @@
                         <img src="../assets/imagens/iconepedidos.png" />
                         <p>Meus pedidos</p>
                     </a>
-                    <a href="suporte.html" class="box">
+                    <RouterLink to="/suporte" class="box">
                         <img src="../assets/imagens/iconesuporte.png" />
                         <p>Suporte ao cliente</p>
-                    </a>
+                    </RouterLink>
                 </div>
             </div>
             <h2>Dados do Perfil</h2>
@@ -63,9 +63,9 @@
         <hr>
         <h2 style="margin-bottom: 1rem; margin-top: 1rem; text-align:center;">Endereços Adicionados</h2>
         <div v-for="endereco in enderecos" :key="endereco.id_endereco" class="profile">
-            <form @submit.prevent="handleEditAddress(endereco.id)">
+            <form>
                 <div class="dados">
-                    <p>Endereço {{ endereco.id }}</p>
+                    <p>Endereço {{ endereco.id_endereco }}</p>
                     <div class="form-endereço">
                         <label for="cep">CEP:</label>
                         <input type="text" id="cep" name="cep" v-model="endereco.cep" pattern="[0-9]{8}"
@@ -83,7 +83,8 @@
                         <label for="complemento">Complemento:</label>
                         <input v-model="endereco.complemento" type="text" id="complemento" name="complemento">
                     </div>
-                    <button class="edit-user-btn">Editar Endereço</button>
+                    <button @click="handleEditAddress(endereco.id_endereco)" class="edit-user-btn">Editar Endereço</button>
+                    <button @click="confirmDelete(endereco.id_endereco)" class="edit-user-btn">Excluir Endereço</button>
                 </div>
             </form>
         </div>
@@ -92,6 +93,7 @@
 
 <script>
 import ClienteService from '@/services/ClienteService';
+import { RouterLink } from 'vue-router';
 
 export default {
     data() {
@@ -138,19 +140,49 @@ export default {
         },
         async getAddress() {
             try {
-            const id_user = localStorage.getItem("userId");
-            const response = await ClienteService.getClienteEnderecos(id_user);
-            this.enderecos = response.data;
+                const id_user = localStorage.getItem("userId");
+                const response = await ClienteService.getClienteEnderecos(id_user);
+                this.enderecos = response.data;
             } catch (error) {
-            alert('Erro ao buscar o endereço');
+                alert('Erro ao buscar o endereço');
             }
         },
         async handleEditAddress(id_endereco) {
+            event.preventDefault();
             try {
-                const response = await ClienteService.editClientesEnderecos(id_endereco, this.enderecoData);
+                const id_user = localStorage.getItem("userId");
+                const enderecoData = this.enderecos.find(endereco => endereco.id_endereco === id_endereco);
+                if (!enderecoData) {
+                    throw new Error('Endereço não encontrado');
+                }
+                const response = await ClienteService.editClientesEnderecos(id_user, id_endereco, enderecoData);
                 alert('Endereço atualizado com sucesso!');
+                // Atualiza a lista de endereços após a edição bem-sucedida
+                await this.getAddress();
             } catch (error) {
+                console.error('Erro ao atualizar o endereço:', error);
                 alert('Erro ao atualizar o endereço');
+            }
+        },
+        async handleDeleteAddress(id_endereco) {
+            event.preventDefault();
+            try {
+                const id_user = localStorage.getItem("userId");
+                await ClienteService.deleteClienteEndereco(id_user, id_endereco);
+                alert('Endereço excluído com sucesso!');
+                // Atualiza a lista de endereços após a exclusão bem-sucedida
+                await this.getAddress();
+            } catch (error) {
+                console.error('Erro ao excluir o endereço:', error);
+                alert('Erro ao excluir o endereço');
+            }
+        },
+        confirmDelete(id_endereco) {
+            event.preventDefault();
+            if (confirm('Tem certeza que deseja excluir este endereço?')) {
+                this.handleDeleteAddress(id_endereco);
+            } else {
+                return false;
             }
         }
     },

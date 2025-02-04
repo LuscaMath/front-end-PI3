@@ -36,5 +36,9 @@ export default {
 
   editClientesEnderecos(id, enderecoId, enderecoData) {
     return api.put(`clientes/${id}/enderecos/${enderecoId}/`, enderecoData);
+  },
+
+  deleteClienteEndereco(id, enderecoId) {
+    return api.delete(`clientes/${id}/enderecos/${enderecoId}/`);
   }
 };

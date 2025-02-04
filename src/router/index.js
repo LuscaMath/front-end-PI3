@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import LoginView from '@/views/LoginView.vue';
 import PerfilView from '@/views/PerfilView.vue';
+import SuporteView from '@/views/SuporteView.vue';
 
 const isAuthenticated = () => !!localStorage.getItem('accessToken');
 
@@ -23,6 +24,12 @@ const router = createRouter({
       path: '/perfil',
       name: 'perfil',
       component: PerfilView,
+      meta: { requiresAuth: true }, // Protegida
+    },
+    {
+      path: '/suporte',
+      name: 'suporte',
+      component: SuporteView,
       meta: { requiresAuth: true }, // Protegida
     },
   ],
