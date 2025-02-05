@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue';
 import LoginView from '@/views/LoginView.vue';
 import PerfilView from '@/views/PerfilView.vue';
 import SuporteView from '@/views/SuporteView.vue';
+import ProdutoView from '@/views/ProdutoView.vue';
 
 const isAuthenticated = () => !!localStorage.getItem('accessToken');
 
@@ -32,6 +33,13 @@ const router = createRouter({
       component: SuporteView,
       meta: { requiresAuth: true }, // Protegida
     },
+    {
+      path: '/produto/:id',
+      name: 'produto',
+      component: ProdutoView, 
+      props: true,
+      meta: { requiresAuth: true }, // Protegida
+    }
   ],
 });
 
