@@ -1,10 +1,10 @@
 <template>
     <header>
         <div class="top-part">
-            <img class="logo" src="./assets/imagens/logomarca.png" alt="">
+            <RouterLink to="/home"><img class="logo" src="./assets/imagens/logomarca.png" alt=""></RouterLink>
             <div class="search-bar">
-                <input type="text" placeholder="O que você está procurando?" />
-                <a href="busca.html"><button>
+                <input v-model="searchTerm" @keyup.enter="search" type="text" placeholder="O que você está procurando?" />
+                <a><button @click="search">
                         <img src="./assets/imagens/lupa.png" alt="Buscar" />
                     </button></a>
             </div>
@@ -16,7 +16,7 @@
                     </div>
                 </RouterLink>
 
-                <a href="carrinho.html"><img src="./assets/imagens/carrinho.png" alt=""></a>
+                <RouterLink to="/carrinho"><img src="./assets/imagens/carrinho.png" alt=""></RouterLink>
                 <button class="logout" v-if="isAuthenticated" @click="logout">Sair</button>
             </div>
         </div>
@@ -27,9 +27,9 @@
                 <span class="bar"></span>
             </button>
             <nav class="nav-links" id="nav-links">
-                <RouterLink to="/">CÃES</RouterLink>
-                <RouterLink to="/">GATOS</RouterLink>
-                <RouterLink to="/">TODOS</RouterLink>
+                <RouterLink to="/cachorros">CÃES</RouterLink>
+                <RouterLink to="/gatos">GATOS</RouterLink>
+                <RouterLink to="/home">TODOS</RouterLink>
             </nav>
         </div>
     </header>
@@ -64,10 +64,12 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterLink, RouterView, useRouter } from 'vue-router';
 import { ref, watchEffect, onMounted, onUnmounted } from 'vue';
 
 const isAuthenticated = ref(!!localStorage.getItem('accessToken'));
+const searchTerm = ref('');
+const router = useRouter();
 
 watchEffect(() => {
   isAuthenticated.value = !!localStorage.getItem('accessToken');
@@ -75,6 +77,12 @@ watchEffect(() => {
 
 // 🔹 Criando um MutationObserver para detectar mudanças no localStorage
 let observer;
+
+const search = () => {
+  if (searchTerm.value.trim()) {
+    router.push({ path: '/busca', query: { termo: searchTerm.value } });
+  }
+};
 
 onMounted(() => {
   const targetNode = document.createElement("div");
@@ -126,7 +134,7 @@ header .top-part {
 }
 
 header .top-part .logo {
-    width: 180px;
+    width: 300px;
 }
 
 header .top-part .search-bar {

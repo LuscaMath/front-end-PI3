@@ -4,10 +4,10 @@
             <div class="containerp">
                 <h1>Minha Conta</h1>
                 <div class="options">
-                    <a href="historico.html" class="box">
+                    <RouterLink to="/minhasCompras" class="box">
                         <img src="../assets/imagens/iconepedidos.png" />
                         <p>Meus pedidos</p>
-                    </a>
+                    </RouterLink>
                     <RouterLink to="/suporte" class="box">
                         <img src="../assets/imagens/iconesuporte.png" />
                         <p>Suporte ao cliente</p>
@@ -431,4 +431,5 @@ input[type="tel"] {
 #button {
     text-align: right;
 }
+
 </style>
